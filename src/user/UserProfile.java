@@ -17,11 +17,11 @@ public class UserProfile
     /**
      * The user's HP
      */
-    protected int hitPoints;
+    protected double hitPoints;
     /**
      * The user's stamina
      */
-    protected int stamina;
+    protected double stamina;
     /**
      * The user's status conditions
      */
@@ -36,7 +36,7 @@ public class UserProfile
      * @param stamina the user's stamina
      * @param statusConditions the user's conditions
      */
-    public UserProfile(String name, Image image, int hitPoints, int stamina, ArrayList<StatusCondition> statusConditions)
+    public UserProfile(String name, Image image, double hitPoints, double stamina, ArrayList<StatusCondition> statusConditions)
     {
         setName(name);
         setImage(image);
@@ -66,7 +66,7 @@ public class UserProfile
      * Gets hitPoints
      * @return hitPoints
      */
-    public int getHitPoints()
+    public double getHitPoints()
     {
         return hitPoints;
     }
@@ -75,7 +75,7 @@ public class UserProfile
      * Gets stamina
      * @return stamina
      */
-    public int getStamina()
+    public double getStamina()
     {
         return stamina;
     }
@@ -112,9 +112,9 @@ public class UserProfile
      * @param hitPoints the value to set
      * @return true/false depending on success
      */
-    public boolean setHitPoints(int hitPoints)
+    public boolean setHitPoints(double hitPoints)
     {
-        if (hitPoints >=0 && hitPoints<=100)
+        if (hitPoints >=0 && hitPoints<=1)
         {
             this.hitPoints = hitPoints;
             return true;
@@ -127,9 +127,9 @@ public class UserProfile
      * @param stamina the value to se
      * @return true/false depending on success
      */
-    public boolean setStamina(int stamina)
+    public boolean setStamina(double stamina)
     {
-        if (stamina >=0 && stamina<=100)
+        if (stamina >=0 && stamina<=1)
         {
             this.stamina = stamina;
             return true;
