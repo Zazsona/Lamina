@@ -1,10 +1,17 @@
 package core;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -14,16 +21,38 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import user.StatusCondition;
 import user.UserProfile;
 
-public class Controller
+import java.io.IOException;
+
+public class HubController
 {
     @FXML
     private VBox profileCollectionBox;
-
+    @FXML
+    private Slider userHPSlider;
+    @FXML
+    private Text userHPText;
+    @FXML
+    private Slider userStaminaSlider;
+    @FXML
+    private Text userStaminaText;
+    @FXML
+    private Text userText;
+    @FXML
+    private Circle userImage;
     public void initialize()
     {
+        userHPSlider.valueProperty().addListener((observable, oldValue, newValue) -> userHPText.setText(newValue.intValue()+"/100"));
+        userHPSlider.setOnScroll((value) -> userHPSlider.adjustValue(userHPSlider.getValue()+(value.getDeltaY()/4)));
+
+        userStaminaSlider.valueProperty().addListener((observable, oldValue, newValue) -> userStaminaText.setText(newValue.intValue()+"/100"));
+        userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
+
+        userText.setOnMouseClicked((value) -> updateUserElement(userText, "Please enter a username."));
+        userImage.setOnMouseClicked((value) -> updateUserElement(userImage, "Please enter an image URL.")); //TODO: Change userImage to a ImageView with setClip set to the circle
     }
     public void addProfile(UserProfile profile)
     {
@@ -82,5 +111,25 @@ public class Controller
         profileBox.getChildren().add(statsBox);
 
         profileCollectionBox.getChildren().add(profileBox);
+    }
+
+    private void updateUserElement(Node nodeToAlter, String prompt)
+    {
+        try
+        {
+            Stage inputStage = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("InputDialogue.fxml"));
+            Parent root = fxmlLoader.load();
+            InputDialogueController idController = fxmlLoader.getController();
+            idController.setNodeToAlter(nodeToAlter);
+            idController.setPrompt(prompt);
+            inputStage.setTitle("Lamina");
+            inputStage.setScene(new Scene(root, 400, 200));
+            inputStage.show();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
