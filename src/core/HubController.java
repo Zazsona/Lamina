@@ -26,6 +26,7 @@ import user.StatusCondition;
 import user.UserProfile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HubController
 {
@@ -42,7 +43,7 @@ public class HubController
     @FXML
     private Text userText;
     @FXML
-    private Circle userImage;
+    private ImageView userImage;
     public void initialize()
     {
         userHPSlider.valueProperty().addListener((observable, oldValue, newValue) -> userHPText.setText(newValue.intValue()+"/100"));
@@ -51,8 +52,12 @@ public class HubController
         userStaminaSlider.valueProperty().addListener((observable, oldValue, newValue) -> userStaminaText.setText(newValue.intValue()+"/100"));
         userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
 
-        userText.setOnMouseClicked((value) -> updateUserElement(userText, "Please enter a username."));
-        userImage.setOnMouseClicked((value) -> updateUserElement(userImage, "Please enter an image URL.")); //TODO: Change userImage to a ImageView with setClip set to the circle
+        userText.setOnMouseClicked((value) -> openUserInputDialogue(userText, "Please enter a username."));
+        userImage.setOnMouseClicked((value) -> openUserInputDialogue(userImage, "Please enter an image URL."));
+
+        Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
+        clip.setEffect(new DropShadow());
+        userImage.setClip(clip);
     }
     public void addProfile(UserProfile profile)
     {
@@ -64,14 +69,20 @@ public class HubController
         VBox identityBox = new VBox();
         identityBox.setPrefHeight(250);
         identityBox.setAlignment(Pos.CENTER);
-        identityBox.setSpacing(10.0);
-        Circle identityImage = new Circle();
-        identityImage.setRadius(60);
-        identityImage.setFill(new ImagePattern(profile.getImage()));
-        identityImage.setEffect(new DropShadow());
+
+        ImageView identityImage = new ImageView(profile.getImage());
+        identityImage.setFitHeight(120);
+        identityImage.setFitWidth(120);
+        Circle identityImageClip = new Circle(identityImage.getFitWidth()/2, identityImage.getFitHeight()/2, (identityImage.getFitWidth()-12)/2);
+        identityImageClip.setFill(new ImagePattern(profile.getImage()));
+        identityImageClip.setEffect(new DropShadow());
+        identityImage.setClip(identityImageClip);
+        CoreUtils.centreImage(identityImage, profile.getImage());
+
         Text identityName = new Text(profile.getName());
         identityName.setFill(Paint.valueOf("#FFFFFF"));
         identityName.setFont(Font.font("System", FontWeight.BOLD, 14));
+
         identityBox.getChildren().add(identityImage);
         identityBox.getChildren().add(identityName);
 
@@ -113,7 +124,7 @@ public class HubController
         profileCollectionBox.getChildren().add(profileBox);
     }
 
-    private void updateUserElement(Node nodeToAlter, String prompt)
+    private void openUserInputDialogue(Node nodeToAlter, String prompt)
     {
         try
         {

@@ -1,12 +1,12 @@
 package core;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Shape;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 public class InputDialogueController
@@ -52,9 +52,11 @@ public class InputDialogueController
         {
             ((Text) node).setText(getInput());
         }
-        else if (node instanceof Shape)
+        else if (node instanceof ImageView)
         {
-            ((Shape) node).setFill(new ImagePattern(new Image(getInput())));
+            Image image = new Image(getInput());
+            ((ImageView) node).setImage(image);
+            CoreUtils.centreImage(((ImageView) node), image);
         }
     }
 }
