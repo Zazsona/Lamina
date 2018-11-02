@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'com.Zazsona'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+sourceSets {
+    main.java.srcDir "src/main/java"
+    test.java.srcDir "src/test/java"
+}
+dependencies {
+}
+
+jar {
+    from configurations.compile.collect { zipTree it }
+    manifest.attributes 'Main-Class': 'core.Main'
+}

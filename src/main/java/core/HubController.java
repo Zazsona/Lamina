@@ -108,8 +108,7 @@ public class HubController
             Circle statsConditionImage = new Circle();
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
-            statsConditionImage.setFill(new ImagePattern((!profile.getStatusConditions().isEmpty() && profile.getStatusConditions().size()-1 >= i) ? profile.getStatusConditions().get(i).getImage() : new Image("file:indent.png")));
-            //TODO: Change from placeholder URL
+            statsConditionImage.setFill(new ImagePattern((!profile.getStatusConditions().isEmpty() && profile.getStatusConditions().size()-1 >= i) ? profile.getStatusConditions().get(i).getImage() : new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
         }
         statsBox.getChildren().add(statsName);
         statsBox.getChildren().add(statsHpBar);
@@ -127,7 +126,7 @@ public class HubController
         try
         {
             Stage inputStage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("InputDialogue.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/inputDialogue.fxml"));
             Parent root = fxmlLoader.load();
             InputDialogueController idController = fxmlLoader.getController();
             idController.setNodeToAlter(nodeToAlter);
