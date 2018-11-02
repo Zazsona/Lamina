@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.ScrollPane?>
@@ -17,9 +25,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.HubController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.HubController">
    <center>
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="720.0" prefWidth="1074.0" style="-fx-background: #b50000; -fx-background-color: #b50000;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="720.0" prefWidth="1074.0" style="-fx-background: #870604; -fx-background-color: #630402;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
             <VBox fx:id="profileCollectionBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                <padding>
@@ -30,7 +38,7 @@
       </ScrollPane>
    </center>
    <right>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="330.0" style="-fx-background-color: #7c0000;" BorderPane.alignment="TOP_CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="330.0" style="-fx-background-color: #242424;" BorderPane.alignment="TOP_CENTER">
          <effect>
             <DropShadow />
          </effect>

@@ -58,69 +58,67 @@ public class HubController
         Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
         clip.setEffect(new DropShadow());
         userImage.setClip(clip);
+
+        for (int i = 0; i<5; i++)
+        {
+            addProfile(new UserProfile("foobar", new Image("file:foobar.png"), Math.random(), Math.random(), new ArrayList<>())); //TODO: Remove. Testing purposes only
+        }
+
     }
     public void addProfile(UserProfile profile)
     {
         HBox profileBox = new HBox();
-        profileBox.setStyle("-fx-background-color: #7c0000;");
+        profileBox.setStyle("-fx-background-color: #242424;");
         profileBox.setEffect(new DropShadow());
         profileBox.setPadding(new Insets(10, 10, 10, 10));
 
-        VBox identityBox = new VBox();
-        identityBox.setPrefHeight(250);
-        identityBox.setAlignment(Pos.CENTER);
-
         ImageView identityImage = new ImageView(profile.getImage());
-        identityImage.setFitHeight(120);
-        identityImage.setFitWidth(120);
+        identityImage.setFitHeight(125);
+        identityImage.setFitWidth(125);
         Circle identityImageClip = new Circle(identityImage.getFitWidth()/2, identityImage.getFitHeight()/2, (identityImage.getFitWidth()-12)/2);
         identityImageClip.setFill(new ImagePattern(profile.getImage()));
         identityImageClip.setEffect(new DropShadow());
         identityImage.setClip(identityImageClip);
         CoreUtils.centreImage(identityImage, profile.getImage());
-
-        Text identityName = new Text(profile.getName());
-        identityName.setFill(Paint.valueOf("#FFFFFF"));
-        identityName.setFont(Font.font("System", FontWeight.BOLD, 14));
-
-        identityBox.getChildren().add(identityImage);
-        identityBox.getChildren().add(identityName);
+        profileBox.getChildren().add(identityImage);
 
         VBox statsBox = new VBox();
         statsBox.setAlignment(Pos.CENTER_LEFT);
         statsBox.setPadding(new Insets(0, 10, 0, 10));
         statsBox.setSpacing(3);
+        Text statsName = new Text(profile.getName());
+        statsName.setFill(Paint.valueOf("#FFFFFF"));
+        statsName.setFont(Font.font("System", FontWeight.BOLD, 18));
         ProgressBar statsHpBar = new ProgressBar();
-        statsHpBar.setStyle("-fx-accent: #16b120; -fx-control-inner-background: #5b0000;");
-        statsHpBar.setMinHeight(30);
+        statsHpBar.setStyle("-fx-accent: #16b120; -fx-control-inner-background: #121413; -fx-background: #242424;");
+        statsHpBar.setMinHeight(20);
         statsHpBar.setMinWidth(400);
         statsHpBar.setProgress(profile.getHitPoints());
         ProgressBar statsStaminaBar = new ProgressBar();
-        statsStaminaBar.setStyle("-fx-accent: #333CF3; -fx-control-inner-background: #5b0000;");
+        statsStaminaBar.setStyle("-fx-accent: #333CF3; -fx-control-inner-background: #121413; -fx-background: #242424;");
         statsStaminaBar.setMinWidth(statsHpBar.getMinWidth()*0.33);
         statsStaminaBar.setProgress(profile.getStamina());
         Pane statsDividerPane = new Pane();
-        statsDividerPane.setMaxHeight(20);
-        statsDividerPane.setMinHeight(20);
+        statsDividerPane.setMaxHeight(5);
+        statsDividerPane.setMinHeight(5);
         HBox statsConditionBox = new HBox();
         statsConditionBox.setSpacing(10);
-        for (StatusCondition statusCondition : profile.getStatusConditions())
+        for (int i = 0; i<9; i++)
         {
             Circle statsConditionImage = new Circle();
-            statsConditionImage.setRadius(30);
-            statsConditionImage.setFill(new ImagePattern(statusCondition.getImage()));
+            statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
+            statsConditionImage.setFill(new ImagePattern((!profile.getStatusConditions().isEmpty() && profile.getStatusConditions().size()-1 >= i) ? profile.getStatusConditions().get(i).getImage() : new Image("file:indent.png")));
+            //TODO: Change from placeholder URL
         }
+        statsBox.getChildren().add(statsName);
         statsBox.getChildren().add(statsHpBar);
         statsBox.getChildren().add(statsStaminaBar);
         statsBox.getChildren().add(statsDividerPane);
         statsBox.getChildren().add(statsConditionBox);
-
-        identityBox.setEffect(null);
         statsBox.setEffect(null);
-        profileBox.getChildren().add(identityBox);
-        profileBox.getChildren().add(statsBox);
 
+        profileBox.getChildren().add(statsBox);
         profileCollectionBox.getChildren().add(profileBox);
     }
 
