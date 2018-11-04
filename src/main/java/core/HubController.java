@@ -22,7 +22,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import user.StatusCondition;
 import user.UserProfile;
 
 import java.io.IOException;
@@ -44,6 +43,10 @@ public class HubController
     private Text userText;
     @FXML
     private ImageView userImage;
+    @FXML
+    private ImageView userImageHover;
+    @FXML
+    private Text userImageInstructions;
     public void initialize()
     {
         userHPSlider.valueProperty().addListener((observable, oldValue, newValue) -> userHPText.setText(newValue.intValue()+"/100"));
@@ -54,6 +57,12 @@ public class HubController
 
         userText.setOnMouseClicked((value) -> openUserInputDialogue(userText, "Please enter a username."));
         userImage.setOnMouseClicked((value) -> openUserInputDialogue(userImage, "Please enter an image URL."));
+        userImage.setOnMouseEntered((value) ->
+                                    {
+                                        userImageHover.setVisible(true);
+                                        userImageInstructions.setVisible(false);
+                                    });
+        userImage.setOnMouseExited((value) -> userImageHover.setVisible(false));
 
         Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
         clip.setEffect(new DropShadow());

@@ -14,11 +14,13 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
@@ -43,12 +45,32 @@
             <DropShadow />
          </effect>
          <children>
-            <ImageView fx:id="userImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" smooth="false" VBox.vgrow="NEVER">
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <Text fx:id="userText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER">
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="userImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                     <image>
+                        <Image url="@../hubGraphics/placeholderProfileImage.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="userImageHover" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../hubGraphics/imageHighlight.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+                  <Text fx:id="userImageInstructions" fill="WHITE" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Click to set profile picture" textAlignment="CENTER" wrappingWidth="150.0">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Text fx:id="userText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Anonymous" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
