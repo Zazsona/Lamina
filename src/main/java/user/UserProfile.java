@@ -21,7 +21,7 @@ public class UserProfile
     /**
      * The user's stamina
      */
-    protected double stamina;
+    protected double stamina = 100;
     /**
      * The user's status conditions
      */
@@ -43,6 +43,23 @@ public class UserProfile
         setHitPoints(hitPoints);
         setStamina(stamina);
         setStatusConditions(statusConditions);
+    }
+
+    /**
+     * Constructor
+     * Creates a user profile with default values.
+     */
+    public UserProfile()
+    {
+        this.name = "Anonymous";
+        this.image = new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
+        this.hitPoints = 100;
+        this.stamina = 100;
+        this.statusConditions = new ArrayList<>();
+        for (int i = 0; i<9; i++)
+        {
+            statusConditions.add(new StatusCondition("None", new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+        }
     }
     /**
      * Gets name
@@ -91,50 +108,74 @@ public class UserProfile
 
     /**
      * Sets the value of name
-     * @param name the value to set
+     * @param name the name to set, of up to 20 characters.
+     * @throws IllegalArgumentException
      */
     public void setName(String name)
     {
-        this.name = name;
+        if (name.length() <= 20)
+        {
+            this.name = name;
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     /**
      * Sets the value of image
-     * @param image the value to set
+     * @param image the image to set, of a maximum size 2000x2000
+     * @throws IllegalArgumentException
      */
     public void setImage(Image image)
     {
-        this.image = image;
+        System.out.println(image.getHeight());
+        if ((image.getHeight() <= 2000) && (image.getWidth() <= 2000))
+        {
+            this.image = image;
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+
+
     }
 
     /**
      * Sets the value of hitPoints
-     * @param hitPoints the value to set
-     * @return true/false depending on success
+     * @param hitPoints the value to set, as a decimal between 0 & 1
+     * @throws IllegalArgumentException
      */
-    public boolean setHitPoints(double hitPoints)
+    public void setHitPoints(double hitPoints)
     {
         if (hitPoints >=0 && hitPoints<=1)
         {
             this.hitPoints = hitPoints;
-            return true;
         }
-        return false;
+        else
+        {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
      * Sets the value of stamina
-     * @param stamina the value to se
-     * @return true/false depending on success
+     * @param stamina the value to set, as a decimal between 0 & 1
+     * @throws IllegalArgumentException
      */
-    public boolean setStamina(double stamina)
+    public void setStamina(double stamina)
     {
         if (stamina >=0 && stamina<=1)
         {
             this.stamina = stamina;
-            return true;
         }
-        return false;
+        else
+        {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -143,6 +184,13 @@ public class UserProfile
      */
     public void setStatusConditions(ArrayList<StatusCondition> statusConditions)
     {
+        for (int i = 0; i<9; i++)
+        {
+            if (statusConditions.size() <= i)
+            {
+                statusConditions.add(new StatusCondition("None", new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+            }
+        }
         this.statusConditions = statusConditions;
     }
 }

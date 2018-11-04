@@ -23,11 +23,7 @@ public class InputDialogueController
     public void initialize()
     {
         promptText.setText(prompt);
-        enterButton.setOnAction((value) ->
-                                {
-                                    alterNode();
-                                    enterButton.getScene().getWindow().hide();
-                                });
+        enterButton.setOnAction((value) -> updateUserProfile());
     }
     public String getInput()
     {
@@ -45,17 +41,40 @@ public class InputDialogueController
         this.node = node;
     }
 
-    private void alterNode()
+    private void updateUserProfile()
     {
-        if (node instanceof Text)
+        try
         {
-            ((Text) node).setText(getInput());
+            if (node instanceof Text)
+            {
+                Main.getCurrentUserProfile().setName(((Text) node).getText());
+                ((Text) node).setText(getInput());
+            }
+            else if (node instanceof ImageView)
+            {
+                Image image = new Image(getInput());
+                Main.getCurrentUserProfile().setImage(((ImageView) node).getImage());
+                ((ImageView) node).setImage(image);
+                CoreUtils.centreImage(((ImageView) node), image);
+            }
+            enterButton.getScene().getWindow().hide();
         }
-        else if (node instanceof ImageView)
+        catch (IllegalArgumentException e)
         {
-            Image image = new Image(getInput());
-            ((ImageView) node).setImage(image);
-            CoreUtils.centreImage(((ImageView) node), image);
+            if (node instanceof Text)
+            {
+                promptText.setText(promptText.getText()+"\n\nThat input is too long. Please try again.");
+            }
+            else if (node instanceof ImageView)
+            {
+                promptText.setText(promptText.getText()+"\n\nThat image is too large. Please try again.");
+            }
         }
+        catch (NullPointerException e)
+        {
+            System.err.println("No node has been set.");
+            e.printStackTrace();
+        }
+
     }
 }
