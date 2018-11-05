@@ -63,7 +63,7 @@
                         <Rectangle2D />
                      </viewport>
                   </ImageView>
-                  <Text fx:id="userImageInstructions" fill="WHITE" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Click to set profile picture" textAlignment="CENTER" wrappingWidth="150.0">
+                  <Text fx:id="userImageInstructions" fill="WHITE" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Click to set profile picture" textAlignment="CENTER" visible="false" wrappingWidth="150.0">
                      <font>
                         <Font name="System Bold" size="21.0" />
                      </font>

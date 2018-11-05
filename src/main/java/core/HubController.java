@@ -49,10 +49,30 @@ public class HubController
     private Text userImageInstructions;
     public void initialize()
     {
-        userHPSlider.valueProperty().addListener((observable, oldValue, newValue) -> userHPText.setText(newValue.intValue()+"/100"));
+        userText.setText(Main.getCurrentUserProfile().getName());
+        userImage.setImage(Main.getCurrentUserProfile().getImage());
+        userHPSlider.setValue(Main.getCurrentUserProfile().getHitPoints());
+        userStaminaSlider.setValue(Main.getCurrentUserProfile().getStamina());
+        userHPText.setText(Math.round(userHPSlider.getValue())+"/100");
+        userStaminaText.setText(Math.round(userStaminaSlider.getValue())+"/100");
+
+        if (Main.getCurrentUserProfile().getImagePath().equals(""))
+        {
+            userImageInstructions.setVisible(true);
+        }
+
+        userHPSlider.valueProperty().addListener((observable, oldValue, newValue) ->
+                                                 {
+                                                     userHPText.setText(newValue.intValue()+"/100");
+                                                     Main.getCurrentUserProfile().setHitPoints(newValue.intValue());
+                                                 });
         userHPSlider.setOnScroll((value) -> userHPSlider.adjustValue(userHPSlider.getValue()+(value.getDeltaY()/4)));
 
-        userStaminaSlider.valueProperty().addListener((observable, oldValue, newValue) -> userStaminaText.setText(newValue.intValue()+"/100"));
+        userStaminaSlider.valueProperty().addListener((observable, oldValue, newValue) ->
+                                                      {
+                                                          userStaminaText.setText(newValue.intValue()+"/100");
+                                                          Main.getCurrentUserProfile().setStamina(newValue.intValue());
+                                                      });
         userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
 
         userText.setOnMouseClicked((value) -> openUserInputDialogue(userText, "Please enter a username."));
@@ -67,13 +87,8 @@ public class HubController
         Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
         clip.setEffect(new DropShadow());
         userImage.setClip(clip);
-
-        for (int i = 0; i<5; i++)
-        {
-            addProfile(new UserProfile("foobar", new Image("file:foobar.png"), Math.random(), Math.random(), new ArrayList<>())); //TODO: Remove. Testing purposes only
-        }
-
     }
+
     public void addProfile(UserProfile profile)
     {
         HBox profileBox = new HBox();

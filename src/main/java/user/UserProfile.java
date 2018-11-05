@@ -11,9 +11,9 @@ public class UserProfile
      */
     protected String name;
     /**
-     * The user's profile picture
+     * The user's profile picture path
      */
-    protected Image image;
+    protected String imagePath; //This is used instead of Image as Gson can't save self-referential objects.
     /**
      * The user's HP
      */
@@ -21,7 +21,7 @@ public class UserProfile
     /**
      * The user's stamina
      */
-    protected double stamina = 100;
+    protected double stamina;
     /**
      * The user's status conditions
      */
@@ -31,15 +31,15 @@ public class UserProfile
     /**
      * Constructor
      * @param name the user's name
-     * @param image the user's profile image
+     * @param imagePath the user's profile image path
      * @param hitPoints the user's HP
      * @param stamina the user's stamina
      * @param statusConditions the user's conditions
      */
-    public UserProfile(String name, Image image, double hitPoints, double stamina, ArrayList<StatusCondition> statusConditions)
+    public UserProfile(String name, String imagePath, double hitPoints, double stamina, ArrayList<StatusCondition> statusConditions)
     {
         setName(name);
-        setImage(image);
+        setImage(imagePath);
         setHitPoints(hitPoints);
         setStamina(stamina);
         setStatusConditions(statusConditions);
@@ -52,13 +52,13 @@ public class UserProfile
     public UserProfile()
     {
         this.name = "Anonymous";
-        this.image = new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
+        this.imagePath = "";
         this.hitPoints = 100;
         this.stamina = 100;
         this.statusConditions = new ArrayList<>();
         for (int i = 0; i<9; i++)
         {
-            statusConditions.add(new StatusCondition("None", new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+            statusConditions.add(new StatusCondition("None", getClass().getClassLoader().getResource("hubGraphics/emptyStatus.png").getPath()));
         }
     }
     /**
@@ -72,11 +72,24 @@ public class UserProfile
 
     /**
      * Gets image
-     * @return image
+     * @return the user's profile image
      */
     public Image getImage()
     {
-        return image;
+        if (imagePath.equals(""))
+        {
+            return new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
+        }
+        return new Image(imagePath);
+    }
+
+    /**
+     * Gets image path
+     * @return the path for the profile image
+     */
+    public String getImagePath()
+    {
+        return imagePath;
     }
 
     /**
@@ -113,7 +126,7 @@ public class UserProfile
      */
     public void setName(String name)
     {
-        if (name.length() <= 20)
+        if ((name.length() <= 20) && (name.length() > 0))
         {
             this.name = name;
         }
@@ -126,15 +139,23 @@ public class UserProfile
 
     /**
      * Sets the value of image
-     * @param image the image to set, of a maximum size 2000x2000
+     * @param imagePath the path of the image to set, of a maximum size 2000x2000
      * @throws IllegalArgumentException
      */
-    public void setImage(Image image)
+    public void setImage(String imagePath)
     {
-        System.out.println(image.getHeight());
-        if ((image.getHeight() <= 2000) && (image.getWidth() <= 2000))
+        Image image;
+        if (imagePath.equals(""))
         {
-            this.image = image;
+            image = new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
+        }
+        else
+        {
+            image = new Image(imagePath);
+        }
+        if (((image.getHeight() <= 2000) && (image.getWidth() <= 2000)) && ((image.getHeight() > 0) && (image.getWidth() > 0)) && !imagePath.toLowerCase().startsWith("file:"))
+        {
+            this.imagePath = imagePath;
         }
         else
         {
@@ -151,7 +172,7 @@ public class UserProfile
      */
     public void setHitPoints(double hitPoints)
     {
-        if (hitPoints >=0 && hitPoints<=1)
+        if (hitPoints >=0 && hitPoints<=100)
         {
             this.hitPoints = hitPoints;
         }
@@ -168,7 +189,7 @@ public class UserProfile
      */
     public void setStamina(double stamina)
     {
-        if (stamina >=0 && stamina<=1)
+        if (stamina >=0 && stamina<=100)
         {
             this.stamina = stamina;
         }
@@ -188,7 +209,7 @@ public class UserProfile
         {
             if (statusConditions.size() <= i)
             {
-                statusConditions.add(new StatusCondition("None", new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+                statusConditions.add(new StatusCondition("None", getClass().getClassLoader().getResource("hubGraphics/emptyStatus.png").getPath()));
             }
         }
         this.statusConditions = statusConditions;

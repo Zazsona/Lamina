@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+
 public class InputDialogueController
 {
     private String prompt = "Please input your value.";
@@ -47,27 +49,37 @@ public class InputDialogueController
         {
             if (node instanceof Text)
             {
-                Main.getCurrentUserProfile().setName(((Text) node).getText());
+                Main.getCurrentUserProfile().setName(getInput());
                 ((Text) node).setText(getInput());
             }
             else if (node instanceof ImageView)
             {
                 Image image = new Image(getInput());
-                Main.getCurrentUserProfile().setImage(((ImageView) node).getImage());
+                Main.getCurrentUserProfile().setImage(getInput());
                 ((ImageView) node).setImage(image);
                 CoreUtils.centreImage(((ImageView) node), image);
             }
+
+            try //TODO: Refine
+            {
+                Main.getCurrentUserProfile().save();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
             enterButton.getScene().getWindow().hide();
         }
         catch (IllegalArgumentException e)
         {
             if (node instanceof Text)
             {
-                promptText.setText(promptText.getText()+"\n\nThat input is too long. Please try again.");
+                promptText.setText(prompt+"\n\nThat input is invalid. Please try again.");
             }
             else if (node instanceof ImageView)
             {
-                promptText.setText(promptText.getText()+"\n\nThat image is too large. Please try again.");
+                promptText.setText(prompt+"\n\nThat image is invalid. Please try again.");
             }
         }
         catch (NullPointerException e)
@@ -75,6 +87,7 @@ public class InputDialogueController
             System.err.println("No node has been set.");
             e.printStackTrace();
         }
+
 
     }
 }

@@ -11,22 +11,22 @@ public class StatusCondition
     /**
      * The condition's image
      */
-    private Image image;
+    private String imagePath; //This is used instead of Image as Gson can't save self-referential objects.
 
     /**
      * Constructor
      * @param title the condition title
-     * @param image the condition image
+     * @param imagePath the condition image path
      */
-    public StatusCondition(String title, Image image)
+    public StatusCondition(String title, String imagePath)
     {
         this.title = title;
-        this.image = image;
+        this.imagePath = imagePath;
     }
 
     /**
      * Gets title
-     * @return title
+     * @return the status' title
      */
     public String getTitle()
     {
@@ -35,12 +35,20 @@ public class StatusCondition
 
     /**
      * Gets image
-     * @return image
+     * @return the status' image
      */
     public Image getImage()
     {
-        return image;
+        return new Image(imagePath);
     }
 
+    /**
+     * Gets image path
+     * @return the path of the status' image
+     */
+    public String getImagePath()
+    {
+        return imagePath;
+    }
 
 }

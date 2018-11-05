@@ -16,6 +16,7 @@ sourceSets {
     test.java.srcDir "src/test/java"
 }
 dependencies {
+    compile 'com.google.code.gson:gson:2.8.5'
 }
 
 jar {
