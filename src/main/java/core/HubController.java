@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import user.StatusCondition;
 import user.UserProfile;
 
 import java.io.IOException;
@@ -127,6 +128,11 @@ public class HubController
         Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
         clip.setEffect(new DropShadow());
         userImage.setClip(clip);
+
+        for (int i = 0; i<6; i++)
+        {
+            addProfile(new UserProfile());
+        }
     }
 
     /**
@@ -171,12 +177,35 @@ public class HubController
         statsDividerPane.setMinHeight(5);
         HBox statsConditionBox = new HBox();
         statsConditionBox.setSpacing(10);
-        for (int i = 0; i<9; i++)
+        for (int i = 0; i<profile.getStatusConditions().size(); i++)
         {
             Circle statsConditionImage = new Circle();
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
-            statsConditionImage.setFill(new ImagePattern((!profile.getStatusConditions().isEmpty() && profile.getStatusConditions().size()-1 >= i) ? profile.getStatusConditions().get(i).getImage() : new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+            switch (profile.getStatusConditions().get(i))
+            {
+                case NONE:
+                    statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+                    break;
+                case GAMING:
+                    break;
+                case WATCHING:
+                    break;
+                case VENTURING:
+                    break;
+                case WORKING:
+                    break;
+                case SLEEPING:
+                    break;
+                case EATING:
+                    break;
+                case SHOPPING:
+                    break;
+                case DRINKING:
+                    break;
+                case HOBBYWORK:
+                    break;
+            }
         }
         statsBox.getChildren().add(statsName);
         statsBox.getChildren().add(statsHpBar);

@@ -58,7 +58,7 @@ public class UserProfile
         this.statusConditions = new ArrayList<>();
         for (int i = 0; i<9; i++)
         {
-            statusConditions.add(new StatusCondition("None", getClass().getClassLoader().getResource("hubGraphics/emptyStatus.png").getPath()));
+            statusConditions.add(StatusCondition.NONE);
         }
     }
     /**
@@ -118,7 +118,7 @@ public class UserProfile
     /**
      * Sets the value of name
      * @param name the name to set, of up to 20 characters.
-     * @throws IllegalArgumentException name is empty or above 20 characters
+     * @throws IllegalArgumentException
      */
     public void setName(String name)
     {
@@ -136,7 +136,7 @@ public class UserProfile
     /**
      * Sets the value of image
      * @param imagePath the path of the image to set, of a maximum size 2000x2000
-     * @throws IllegalArgumentException invalid imagePath / image size
+     * @throws IllegalArgumentException
      */
     public void setImage(String imagePath)
     {
@@ -153,8 +153,8 @@ public class UserProfile
 
     /**
      * Sets the value of hitPoints
-     * @param hitPoints the value to set, as a decimal between 0 & 100
-     * @throws IllegalArgumentException invalid range
+     * @param hitPoints the value to set, as a decimal between 0 & 1
+     * @throws IllegalArgumentException
      */
     public void setHitPoints(double hitPoints)
     {
@@ -170,8 +170,8 @@ public class UserProfile
 
     /**
      * Sets the value of stamina
-     * @param stamina the value to set, between 0 & 100
-     * @throws IllegalArgumentException invalid range
+     * @param stamina the value to set, as a decimal between 0 & 1
+     * @throws IllegalArgumentException
      */
     public void setStamina(double stamina)
     {
@@ -187,8 +187,7 @@ public class UserProfile
 
     /**
      * Sets the value of statusConditions
-     * @param statusConditions the list of status conditions to set, of up to 9 elements.
-     * @throws IllegalArgumentException too many elements
+     * @param statusConditions the list of status conditions to set.
      */
     public void setStatusConditions(ArrayList<StatusCondition> statusConditions)
     {
@@ -196,16 +195,13 @@ public class UserProfile
         {
             throw new IllegalArgumentException();
         }
-        else
+        for (int i = 0; i<9; i++)
         {
-            for (int i = 0; i<9; i++)
+            if (statusConditions.size() <= i)
             {
-                if (statusConditions.size() <= i)
-                {
-                    statusConditions.add(new StatusCondition("None", getClass().getClassLoader().getResource("hubGraphics/emptyStatus.png").getPath()));
-                }
+                statusConditions.add(StatusCondition.NONE);
             }
-            this.statusConditions = statusConditions;
         }
+        this.statusConditions = statusConditions;
     }
 }
