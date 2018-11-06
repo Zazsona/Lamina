@@ -29,31 +29,64 @@ import java.io.IOException;
 
 public class HubController
 {
+    /**
+     * The VBox used to store other user's profiles
+     */
     @FXML
     private VBox profileCollectionBox;
+    /**
+     * This user's HP control
+     */
     @FXML
     private Slider userHPSlider;
+    /**
+     * Text representing this user's current HP out of 100
+     */
     @FXML
     private Text userHPText;
+    /**
+     * This user's stamina control
+     */
     @FXML
     private Slider userStaminaSlider;
+    /**
+     * Text representing this user's current stamina out of 100
+     */
     @FXML
     private Text userStaminaText;
+    /**
+     * This user's name
+     */
     @FXML
     private Text userText;
+    /**
+     * This user's profile image
+     */
     @FXML
     private ImageView userImage;
+    /**
+     * The overlay effect for hovering over the userImage
+     */
     @FXML
     private ImageView userImageHover;
+    /**
+     * The instructions on how to set a userImage
+     */
     @FXML
     private Text userImageInstructions;
 
+    /**
+     * Enum to represent the various input types that can be requested.
+     */
     private enum InputRequest
     {
         USERNAME,
         USERIMAGE
     }
 
+    /**
+     * Initializer
+     */
     public void initialize()
     {
         userText.setText(Main.getCurrentUserProfile().getName());
@@ -65,7 +98,7 @@ public class HubController
 
         if (Main.getCurrentUserProfile().getImagePath().equals(""))
         {
-            userImageInstructions.setVisible(true);
+            userImageInstructions.setVisible(true); //Show the instructions if the user has the default profile image
         }
 
         userHPSlider.valueProperty().addListener((observable, oldValue, newValue) ->
@@ -96,6 +129,10 @@ public class HubController
         userImage.setClip(clip);
     }
 
+    /**
+     * Adds the specified profile onto the GUI.
+     * @param profile the profile to add
+     */
     public void addProfile(UserProfile profile)
     {
         HBox profileBox = new HBox();
@@ -152,6 +189,10 @@ public class HubController
         profileCollectionBox.getChildren().add(profileBox);
     }
 
+    /**
+     * Takes an input from the user defined by the inputrequest
+     * @param inputRequest the input type to get
+     */
     private void getInput(InputRequest inputRequest)
     {
         try
@@ -177,7 +218,7 @@ public class HubController
                 @Override
                 protected String call() throws Exception
                 {
-                    while (idController.getInput().equals(""))
+                    while (idController.getInput().equals("")) //TODO: This is infinite if the window is closed.
                     {
                         Thread.sleep(100);
                     }

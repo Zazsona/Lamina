@@ -43,6 +43,10 @@ public class Main extends Application
         }
     }
 
+    /**
+     * Gets the user profile for this user. That is, the one at this PC.
+     * @return the CurrentUserProfile of this user.
+     */
     public static CurrentUserProfile getCurrentUserProfile()
     {
         return currentUserProfile;

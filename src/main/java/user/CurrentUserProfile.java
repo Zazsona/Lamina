@@ -7,6 +7,11 @@ import java.nio.file.Files;
 
 public class CurrentUserProfile extends UserProfile
 {
+    /**
+     * Gets the saved file for this user's last state
+     * @return the file storing the user's last state
+     * @throws IOException unable to access or replace file
+     */
     private File getFile() throws IOException
     {
         try
@@ -33,6 +38,10 @@ public class CurrentUserProfile extends UserProfile
 
     }
 
+    /**
+     * Restores the user's state from the previous session
+     * @throws IOException unable to restore from file
+     */
     public void restore() throws IOException
     {
         try
@@ -53,6 +62,9 @@ public class CurrentUserProfile extends UserProfile
 
     }
 
+    /**
+     * Saves the user's current state.
+     */
     public void save()
     {
         try
@@ -70,6 +82,9 @@ public class CurrentUserProfile extends UserProfile
 
     }
 
+    /**
+     * Deletes the user's stored state, and replaces it with an empty file.
+     */
     public void deleteFile()
     {
         try
