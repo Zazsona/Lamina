@@ -218,47 +218,51 @@ public class HubController
                 @Override
                 protected String call() throws Exception
                 {
-                    while (idController.getInput().equals("")) //TODO: This is infinite if the window is closed.
+                    while (idController.getInput().equals("") && inputStage.getScene().getWindow().isShowing())
                     {
                         Thread.sleep(100);
                     }
-                    String input = idController.getInput();
-                    try
+                    if (inputStage.getScene().getWindow().isShowing())
                     {
-                        if (inputRequest.equals(InputRequest.USERNAME))
+                        String input = idController.getInput();
+                        try
                         {
-                            Main.getCurrentUserProfile().setName(input);
-                            Platform.runLater(() -> userText.setText(input));
+                            if (inputRequest.equals(InputRequest.USERNAME))
+                            {
+                                Main.getCurrentUserProfile().setName(input);
+                                Platform.runLater(() -> userText.setText(input));
+                            }
+                            else if (inputRequest.equals(InputRequest.USERIMAGE))
+                            {
+                                Main.getCurrentUserProfile().setImage(input);
+                                Platform.runLater(() ->
+                                                  {
+                                                      userImage.setImage(Main.getCurrentUserProfile().getImage());
+                                                      CoreUtils.centreImage(userImage, Main.getCurrentUserProfile().getImage());
+                                                  });
+                            }
+                            Main.getCurrentUserProfile().save();
+                            Platform.runLater(() -> root.getScene().getWindow().hide());
                         }
-                        else if (inputRequest.equals(InputRequest.USERIMAGE))
+                        catch (IllegalArgumentException e)
                         {
-                            Main.getCurrentUserProfile().setImage(input);
-                            Platform.runLater(() ->
-                                              {
-                                                  userImage.setImage(Main.getCurrentUserProfile().getImage());
-                                                  CoreUtils.centreImage(userImage, Main.getCurrentUserProfile().getImage());
-                                              });
+                            if (inputRequest.equals(InputRequest.USERNAME))
+                            {
+                                idController.setPrompt("Please enter a username."+"\n\nThat input is invalid. Please try again.");
+                            }
+                            else if (inputRequest.equals(InputRequest.USERIMAGE))
+                            {
+                                idController.setPrompt("Please enter an image URL."+"\n\nThat image is invalid. Please try again.");
+                            }
                         }
-                        Main.getCurrentUserProfile().save();
-                        Platform.runLater(() -> root.getScene().getWindow().hide());
+                        catch (NullPointerException e)
+                        {
+                            System.err.println("No node has been set.");
+                            e.printStackTrace();
+                        }
+                        return input;
                     }
-                    catch (IllegalArgumentException e)
-                    {
-                        if (inputRequest.equals(InputRequest.USERNAME))
-                        {
-                            idController.setPrompt("Please enter a username."+"\n\nThat input is invalid. Please try again.");
-                        }
-                        else if (inputRequest.equals(InputRequest.USERIMAGE))
-                        {
-                            idController.setPrompt("Please enter an image URL."+"\n\nThat image is invalid. Please try again.");
-                        }
-                    }
-                    catch (NullPointerException e)
-                    {
-                        System.err.println("No node has been set.");
-                        e.printStackTrace();
-                    }
-                    return input;
+                    return null; //Input was closed
                 }
             };
             new Thread(waitOnInput).start();
