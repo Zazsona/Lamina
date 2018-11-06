@@ -6,9 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import user.CurrentUserProfile;
-import user.UserProfile;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application
@@ -40,18 +38,7 @@ public class Main extends Application
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/hub.fxml"));
             primaryStage.setTitle("Lamina");
             primaryStage.setScene(new Scene(root, 1280, 720));
-            primaryStage.setOnCloseRequest((event) ->
-                                           {
-                                               try
-                                               {
-                                                   currentUserProfile.save();
-                                               }
-                                               catch (IOException e) //TODO: Refine
-                                               {
-                                                   e.printStackTrace();
-                                               }
-
-                                           });
+            primaryStage.setOnCloseRequest((event) -> currentUserProfile.save());
             primaryStage.show();
         }
     }

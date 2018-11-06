@@ -53,7 +53,7 @@ public class CurrentUserProfile extends UserProfile
 
     }
 
-    public void save() throws IOException
+    public void save()
     {
         try
         {
@@ -66,7 +66,6 @@ public class CurrentUserProfile extends UserProfile
         catch (IOException | NullPointerException e)
         {
             System.err.println("Could not save to file.");
-            throw new IOException();
         }
 
     }

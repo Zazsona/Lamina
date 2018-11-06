@@ -9,23 +9,23 @@ public class UserProfile
     /**
      * The user's name
      */
-    protected String name;
+    private String name;
     /**
      * The user's profile picture path
      */
-    protected String imagePath; //This is used instead of Image as Gson can't save self-referential objects.
+    private String imagePath; //This is used instead of Image as Gson can't save self-referential objects.
     /**
      * The user's HP
      */
-    protected double hitPoints;
+    private double hitPoints;
     /**
      * The user's stamina
      */
-    protected double stamina;
+    private double stamina;
     /**
      * The user's status conditions
      */
-    protected ArrayList<StatusCondition> statusConditions;
+    private ArrayList<StatusCondition> statusConditions;
 
 
     /**
@@ -76,11 +76,7 @@ public class UserProfile
      */
     public Image getImage()
     {
-        if (imagePath.equals(""))
-        {
-            return new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
-        }
-        return new Image(imagePath);
+        return (imagePath.equals("")) ? new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png")) : new Image(imagePath);
     }
 
     /**
@@ -144,15 +140,7 @@ public class UserProfile
      */
     public void setImage(String imagePath)
     {
-        Image image;
-        if (imagePath.equals(""))
-        {
-            image = new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png"));
-        }
-        else
-        {
-            image = new Image(imagePath);
-        }
+        Image image = (imagePath.equals("")) ? new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/placeholderProfileImage.png")) : new Image(imagePath);
         if (((image.getHeight() <= 2000) && (image.getWidth() <= 2000)) && ((image.getHeight() > 0) && (image.getWidth() > 0)) && !imagePath.toLowerCase().startsWith("file:"))
         {
             this.imagePath = imagePath;
@@ -161,8 +149,6 @@ public class UserProfile
         {
             throw new IllegalArgumentException();
         }
-
-
     }
 
     /**

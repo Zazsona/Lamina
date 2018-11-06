@@ -1,10 +1,11 @@
 package core;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
 import user.UserProfile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class HubController
 {
@@ -47,6 +47,13 @@ public class HubController
     private ImageView userImageHover;
     @FXML
     private Text userImageInstructions;
+
+    private enum InputRequest
+    {
+        USERNAME,
+        USERIMAGE
+    }
+
     public void initialize()
     {
         userText.setText(Main.getCurrentUserProfile().getName());
@@ -75,8 +82,8 @@ public class HubController
                                                       });
         userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
 
-        userText.setOnMouseClicked((value) -> openUserInputDialogue(userText, "Please enter a username."));
-        userImage.setOnMouseClicked((value) -> openUserInputDialogue(userImage, "Please enter an image URL."));
+        userText.setOnMouseClicked((value) -> getInput(InputRequest.USERNAME));
+        userImage.setOnMouseClicked((value) -> getInput(InputRequest.USERIMAGE));
         userImage.setOnMouseEntered((value) ->
                                     {
                                         userImageHover.setVisible(true);
@@ -145,22 +152,80 @@ public class HubController
         profileCollectionBox.getChildren().add(profileBox);
     }
 
-    private void openUserInputDialogue(Node nodeToAlter, String prompt)
+    private void getInput(InputRequest inputRequest)
     {
         try
         {
             Stage inputStage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/inputDialogue.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(CoreUtils.class.getClassLoader().getResource("fxml/inputDialogue.fxml"));
             Parent root = fxmlLoader.load();
             InputDialogueController idController = fxmlLoader.getController();
-            idController.setNodeToAlter(nodeToAlter);
-            idController.setPrompt(prompt);
             inputStage.setTitle("Lamina");
             inputStage.setScene(new Scene(root, 400, 200));
+
+            switch (inputRequest)
+            {
+                case USERNAME:
+                    idController.setPrompt("Please enter a username.");
+                    break;
+                case USERIMAGE:
+                    idController.setPrompt("Please enter an image URL.");
+                    break;
+            }
+            Task<String> waitOnInput = new Task<String>()
+            {
+                @Override
+                protected String call() throws Exception
+                {
+                    while (idController.getInput().equals(""))
+                    {
+                        Thread.sleep(100);
+                    }
+                    String input = idController.getInput();
+                    try
+                    {
+                        if (inputRequest.equals(InputRequest.USERNAME))
+                        {
+                            Main.getCurrentUserProfile().setName(input);
+                            Platform.runLater(() -> userText.setText(input));
+                        }
+                        else if (inputRequest.equals(InputRequest.USERIMAGE))
+                        {
+                            Main.getCurrentUserProfile().setImage(input);
+                            Platform.runLater(() ->
+                                              {
+                                                  userImage.setImage(Main.getCurrentUserProfile().getImage());
+                                                  CoreUtils.centreImage(userImage, Main.getCurrentUserProfile().getImage());
+                                              });
+                        }
+                        Main.getCurrentUserProfile().save();
+                        Platform.runLater(() -> root.getScene().getWindow().hide());
+                    }
+                    catch (IllegalArgumentException e)
+                    {
+                        if (inputRequest.equals(InputRequest.USERNAME))
+                        {
+                            idController.setPrompt("Please enter a username."+"\n\nThat input is invalid. Please try again.");
+                        }
+                        else if (inputRequest.equals(InputRequest.USERIMAGE))
+                        {
+                            idController.setPrompt("Please enter an image URL."+"\n\nThat image is invalid. Please try again.");
+                        }
+                    }
+                    catch (NullPointerException e)
+                    {
+                        System.err.println("No node has been set.");
+                        e.printStackTrace();
+                    }
+                    return input;
+                }
+            };
+            new Thread(waitOnInput).start();
             inputStage.show();
         }
         catch (IOException e)
         {
+            System.err.println("Unable to open input dialogue.");
             e.printStackTrace();
         }
     }
