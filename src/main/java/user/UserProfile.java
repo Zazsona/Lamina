@@ -3,6 +3,7 @@ package user;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserProfile
 {
@@ -25,7 +26,7 @@ public class UserProfile
     /**
      * The user's status conditions
      */
-    private ArrayList<StatusCondition> statusConditions;
+    private StatusCondition[] statusConditions;
 
 
     /**
@@ -36,7 +37,7 @@ public class UserProfile
      * @param stamina the user's stamina
      * @param statusConditions the user's conditions
      */
-    public UserProfile(String name, String imagePath, double hitPoints, double stamina, ArrayList<StatusCondition> statusConditions)
+    public UserProfile(String name, String imagePath, double hitPoints, double stamina, StatusCondition[] statusConditions)
     {
         setName(name);
         setImage(imagePath);
@@ -55,11 +56,8 @@ public class UserProfile
         this.imagePath = "";
         this.hitPoints = 100;
         this.stamina = 100;
-        this.statusConditions = new ArrayList<>();
-        for (int i = 0; i<9; i++)
-        {
-            statusConditions.add(StatusCondition.NONE);
-        }
+        this.statusConditions = new StatusCondition[9];
+        Arrays.fill(this.statusConditions, StatusCondition.NONE);
     }
     /**
      * Gets name
@@ -108,9 +106,9 @@ public class UserProfile
 
     /**
      * Gets statusConditions
-     * @return arraylist holding all status conditions
+     * @return array holding all status conditions
      */
-    public ArrayList<StatusCondition> getStatusConditions()
+    public StatusCondition[] getStatusConditions()
     {
         return statusConditions;
     }
@@ -189,19 +187,40 @@ public class UserProfile
      * Sets the value of statusConditions
      * @param statusConditions the list of status conditions to set.
      */
-    public void setStatusConditions(ArrayList<StatusCondition> statusConditions)
+    public void setStatusConditions(StatusCondition[] statusConditions)
     {
-        if (statusConditions.size() > 9)
+        this.statusConditions = Arrays.copyOf(statusConditions, 9);
+        Arrays.fill(this.statusConditions, statusConditions.length, this.statusConditions.length, StatusCondition.NONE);
+    }
+
+    public void addStatusCondition(StatusCondition condition)
+    {
+        for (int i = 0; i<statusConditions.length; i++)
         {
-            throw new IllegalArgumentException();
-        }
-        for (int i = 0; i<9; i++)
-        {
-            if (statusConditions.size() <= i)
+            if (statusConditions[i].equals(StatusCondition.NONE))
             {
-                statusConditions.add(StatusCondition.NONE);
+                statusConditions[i] = condition;
             }
         }
-        this.statusConditions = statusConditions;
+    }
+
+    public void removeStatusCondition(StatusCondition condition)
+    {
+        for (int i = 0; i<statusConditions.length; i++)
+        {
+            if (statusConditions[i].equals(condition))
+            {
+                statusConditions[i] = StatusCondition.NONE;
+                if (!statusConditions[i+1].equals(StatusCondition.NONE))
+                {
+                    for (int j = i; j<statusConditions.length-1; j++)
+                    {
+                        statusConditions[j] = statusConditions[j+1];
+
+                    }
+                }
+                break;
+            }
+        }
     }
 }

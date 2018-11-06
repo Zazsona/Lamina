@@ -25,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import user.StatusCondition;
 import user.UserProfile;
+import user.UserProfileManager;
 
 import java.io.IOException;
 
@@ -90,14 +91,14 @@ public class HubController
      */
     public void initialize()
     {
-        userText.setText(Main.getCurrentUserProfile().getName());
-        userImage.setImage(Main.getCurrentUserProfile().getImage());
-        userHPSlider.setValue(Main.getCurrentUserProfile().getHitPoints());
-        userStaminaSlider.setValue(Main.getCurrentUserProfile().getStamina());
+        userText.setText(UserProfileManager.getCurrentUserProfile().getName());
+        userImage.setImage(UserProfileManager.getCurrentUserProfile().getImage());
+        userHPSlider.setValue(UserProfileManager.getCurrentUserProfile().getHitPoints());
+        userStaminaSlider.setValue(UserProfileManager.getCurrentUserProfile().getStamina());
         userHPText.setText(Math.round(userHPSlider.getValue())+"/100");
         userStaminaText.setText(Math.round(userStaminaSlider.getValue())+"/100");
 
-        if (Main.getCurrentUserProfile().getImagePath().equals(""))
+        if (UserProfileManager.getCurrentUserProfile().getImagePath().equals(""))
         {
             userImageInstructions.setVisible(true); //Show the instructions if the user has the default profile image
         }
@@ -105,14 +106,14 @@ public class HubController
         userHPSlider.valueProperty().addListener((observable, oldValue, newValue) ->
                                                  {
                                                      userHPText.setText(newValue.intValue()+"/100");
-                                                     Main.getCurrentUserProfile().setHitPoints(newValue.intValue());
+                                                     UserProfileManager.getCurrentUserProfile().setHitPoints(newValue.intValue());
                                                  });
         userHPSlider.setOnScroll((value) -> userHPSlider.adjustValue(userHPSlider.getValue()+(value.getDeltaY()/4)));
 
         userStaminaSlider.valueProperty().addListener((observable, oldValue, newValue) ->
                                                       {
                                                           userStaminaText.setText(newValue.intValue()+"/100");
-                                                          Main.getCurrentUserProfile().setStamina(newValue.intValue());
+                                                          UserProfileManager.getCurrentUserProfile().setStamina(newValue.intValue());
                                                       });
         userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
 
@@ -129,7 +130,7 @@ public class HubController
         clip.setEffect(new DropShadow());
         userImage.setClip(clip);
 
-        for (int i = 0; i<6; i++)
+        for (int i = 0; i<6; i++) //TODO: Remove
         {
             addProfile(new UserProfile());
         }
@@ -177,12 +178,12 @@ public class HubController
         statsDividerPane.setMinHeight(5);
         HBox statsConditionBox = new HBox();
         statsConditionBox.setSpacing(10);
-        for (int i = 0; i<profile.getStatusConditions().size(); i++)
+        for (int i = 0; i<profile.getStatusConditions().length; i++)
         {
             Circle statsConditionImage = new Circle();
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
-            switch (profile.getStatusConditions().get(i))
+            switch (profile.getStatusConditions()[i])
             {
                 case NONE:
                     statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
@@ -258,19 +259,19 @@ public class HubController
                         {
                             if (inputRequest.equals(InputRequest.USERNAME))
                             {
-                                Main.getCurrentUserProfile().setName(input);
+                                UserProfileManager.getCurrentUserProfile().setName(input);
                                 Platform.runLater(() -> userText.setText(input));
                             }
                             else if (inputRequest.equals(InputRequest.USERIMAGE))
                             {
-                                Main.getCurrentUserProfile().setImage(input);
+                                UserProfileManager.getCurrentUserProfile().setImage(input);
                                 Platform.runLater(() ->
                                                   {
-                                                      userImage.setImage(Main.getCurrentUserProfile().getImage());
-                                                      CoreUtils.centreImage(userImage, Main.getCurrentUserProfile().getImage());
+                                                      userImage.setImage(UserProfileManager.getCurrentUserProfile().getImage());
+                                                      CoreUtils.centreImage(userImage, UserProfileManager.getCurrentUserProfile().getImage());
                                                   });
                             }
-                            Main.getCurrentUserProfile().save();
+                            UserProfileManager.getCurrentUserProfile().save();
                             Platform.runLater(() -> root.getScene().getWindow().hide());
                         }
                         catch (IllegalArgumentException e)
