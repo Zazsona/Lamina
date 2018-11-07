@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
@@ -11,125 +16,140 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
+
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.HubController">
    <center>
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="720.0" prefWidth="1074.0"
-                  style="-fx-background: #870604; -fx-background-color: #630402;" vbarPolicy="NEVER"
-                  BorderPane.alignment="CENTER">
-         <VBox fx:id="profileCollectionBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
-            <padding>
-               <Insets left="50.0" right="50.0" top="10.0"/>
-            </padding>
-         </VBox>
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="720.0" prefWidth="1074.0" style="-fx-background: #870604; -fx-background-color: #630402;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <VBox fx:id="profileCollectionBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+               <padding>
+                  <Insets left="50.0" right="50.0" top="10.0" />
+               </padding>
+            </VBox>
+         </content>
       </ScrollPane>
    </center>
    <right>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="330.0" style="-fx-background-color: #242424;"
-            BorderPane.alignment="TOP_CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="330.0" style="-fx-background-color: #242424;" BorderPane.alignment="TOP_CENTER">
          <effect>
-            <DropShadow/>
+            <DropShadow />
          </effect>
-         <StackPane prefHeight="150.0" prefWidth="200.0">
-            <ImageView fx:id="userImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
-               <viewport>
-                  <Rectangle2D/>
-               </viewport>
-               <Image url="@../hubGraphics/placeholderProfileImage.png"/>
-            </ImageView>
-            <ImageView fx:id="userImageHover" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true"
-                       pickOnBounds="true" preserveRatio="true" visible="false">
-               <viewport>
-                  <Rectangle2D/>
-               </viewport>
-               <Image url="@../hubGraphics/imageHighlight.png"/>
-            </ImageView>
-            <Text fx:id="userImageInstructions" fill="WHITE" mouseTransparent="true" strokeType="OUTSIDE"
-                  strokeWidth="0.0" text="Click to set profile picture" textAlignment="CENTER" visible="false"
-                  wrappingWidth="150.0">
+         <children>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="userImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" smooth="false">
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                     <image>
+                        <Image url="@../hubGraphics/placeholderProfileImage.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="userImageHover" fitHeight="200.0" fitWidth="200.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                     <image>
+                        <Image url="@../hubGraphics/imageHighlight.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="userImageInstructions" fill="WHITE" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Click to set profile picture" textAlignment="CENTER" visible="false" wrappingWidth="150.0">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <Text fx:id="userText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Anonymous" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold" size="21.0"/>
+                  <Font name="System Bold" size="20.0" />
                </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </Text>
-         </StackPane>
-         <Text fx:id="userText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Anonymous"
-               textAlignment="CENTER">
-            <font>
-               <Font name="System Bold" size="20.0"/>
-            </font>
-            <VBox.margin>
-               <Insets/>
-            </VBox.margin>
-         </Text>
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1.0" stroke="WHITE" strokeType="INSIDE"
-                    strokeWidth="0.0" width="250.0">
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Rectangle>
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="HP" textAlignment="CENTER">
-            <font>
-               <Font name="System Bold" size="14.0"/>
-            </font>
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Text>
-         <Slider fx:id="userHPSlider" style="-fx-control-inner-background: #16b120;" value="100.0">
-            <VBox.margin>
-               <Insets left="10.0" right="10.0"/>
-            </VBox.margin>
-            <effect>
-               <InnerShadow color="#16b120" height="207.8" radius="56.7"/>
-            </effect>
-         </Slider>
-         <Text fx:id="userHPText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100/100"
-               textAlignment="CENTER"/>
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Stamina" textAlignment="CENTER">
-            <font>
-               <Font name="System Bold" size="14.0"/>
-            </font>
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Text>
-         <Slider fx:id="userStaminaSlider" style="-fx-control-inner-background: #333CF3;" value="100.0">
-            <effect>
-               <InnerShadow color="#333cf3" height="207.8" radius="56.7"/>
-            </effect>
-            <VBox.margin>
-               <Insets left="10.0" right="10.0"/>
-            </VBox.margin>
-         </Slider>
-         <Text fx:id="userStaminaText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100/100"
-               textAlignment="CENTER"/>
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1.0" stroke="WHITE" strokeType="INSIDE"
-                    strokeWidth="0.0" width="250.0">
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Rectangle>
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" textAlignment="CENTER">
-            <font>
-               <Font name="System Bold" size="14.0"/>
-            </font>
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Text>
-         <GridPane hgap="5.0" prefHeight="330.0" prefWidth="330.0" vgap="5.0">
-            <columnConstraints>
-               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-               <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <Circle fill="DODGERBLUE" radius="45.0" stroke="BLACK" strokeType="INSIDE"/>
-            <Circle fill="DODGERBLUE" radius="45.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1"/>
-         </GridPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="250.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Rectangle>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="HP" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Text>
+            <Slider fx:id="userHPSlider" style="-fx-control-inner-background: #16b120;" value="100.0">
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+               <effect>
+                  <InnerShadow color="#16b120" height="207.8" radius="56.7" />
+               </effect>
+            </Slider>
+            <Text fx:id="userHPText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100/100" textAlignment="CENTER" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Stamina" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Text>
+            <Slider fx:id="userStaminaSlider" style="-fx-control-inner-background: #333CF3;" value="100.0">
+               <effect>
+                  <InnerShadow color="#333cf3" height="207.8" radius="56.7" />
+               </effect>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </Slider>
+            <Text fx:id="userStaminaText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="100/100" textAlignment="CENTER" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="250.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Rectangle>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Text>
+            <GridPane hgap="5.0" prefHeight="330.0" prefWidth="330.0" vgap="5.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                     <image>
+                        <Image url="@../hubGraphics/status/none.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../hubGraphics/status/gaming.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                     <image>
+                        <Image url="@../hubGraphics/status/watching.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </GridPane>
+         </children>
       </VBox>
    </right>
 </BorderPane>

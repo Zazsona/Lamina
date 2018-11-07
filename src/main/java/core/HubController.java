@@ -28,6 +28,8 @@ import user.UserProfile;
 import user.UserProfileManager;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.*;
 
 public class HubController
 {
@@ -130,10 +132,26 @@ public class HubController
         clip.setEffect(new DropShadow());
         userImage.setClip(clip);
 
-        for (int i = 0; i<6; i++) //TODO: Remove
+        Timer profileListUpdater = new Timer(true);
+        profileListUpdater.schedule(new TimerTask()
         {
-            addProfile(new UserProfile());
-        }
+            @Override
+            public void run()
+            {
+                Platform.runLater(() ->
+                                  {
+                                      profileCollectionBox.getChildren().removeAll(profileCollectionBox.getChildren());
+                                      Iterator profileListIterator = UserProfileManager.getUserProfiles().entrySet().iterator();
+                                      while (profileListIterator.hasNext())
+                                      {
+                                          HashMap.Entry<String, UserProfile> entry = (HashMap.Entry<String, UserProfile>) profileListIterator.next();
+                                          addProfile(entry.getValue());
+                                      }
+                                  }
+                );
+            }
+        }, 0, 1000*5);
+
     }
 
     /**
@@ -186,7 +204,7 @@ public class HubController
             switch (profile.getStatusConditions()[i])
             {
                 case NONE:
-                    statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/emptyStatus.png"))));
+                    statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/none.png"))));
                     break;
                 case GAMING:
                     break;

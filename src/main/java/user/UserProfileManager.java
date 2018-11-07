@@ -62,23 +62,28 @@ public class UserProfileManager //TODO: Replace usage of names with UUID.
     {
         if (userProfiles.size() == 0)
         {
-            profileCleanerTimer = new Timer();
+            profileCleanerTimer = new Timer(true);
             profileCleanerTimer.schedule(new TimerTask()
             {
                 @Override
                 public void run()
                 {
+                    ArrayList<UserProfile> profilesToRemove = new ArrayList<>();
                     Iterator profileTimeIterator = userProfileTime.entrySet().iterator();
                     while (profileTimeIterator.hasNext())
                     {
                         HashMap.Entry<String, Long> entry = (HashMap.Entry<String, Long>) profileTimeIterator.next();
                         if (Instant.now().toEpochMilli() - entry.getValue() >= 1000*30)
                         {
-                            removeUserProfile(userProfiles.get(entry.getKey()));
+                            profilesToRemove.add(userProfiles.get(entry.getKey())); //We cannot remove these directly, as it will result in concurrent modification with the iterator.
                         }
                     }
+                    for (UserProfile profile : profilesToRemove)
+                    {
+                        removeUserProfile(profile);
+                    }
                 }
-            }, 1000*60, 1000*60);
+            }, 1000*32, 1000*32);
         }
 
 
