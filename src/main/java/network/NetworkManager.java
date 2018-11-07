@@ -7,29 +7,19 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class NetworkManager
 {
     private static DatagramSocket socket;
 
+    /**
+     * Starts the network component
+     */
     public static void initialize()
     {
         try
         {
             socket = new DatagramSocket(53719);
-
-            Timer profileSendingTimer = new Timer();
-            profileSendingTimer.schedule(new TimerTask()
-            {
-                @Override
-                public void run()
-                {
-                    sendProfile();
-                }
-            }, 1000*5, 1000*5); //TODO: Optimise
-
             runServer();
         }
         catch (IOException e)
@@ -40,6 +30,9 @@ public class NetworkManager
 
     }
 
+    /**
+     * Receives profiles and adds them to the profile list
+     */
     public static void runServer()
     {
         while (true)
@@ -64,12 +57,17 @@ public class NetworkManager
         }
     }
 
+    /**
+     * Sends out this user's profile
+     */
     public static void sendProfile()
     {
         try
         {
+            String[] ip = InetAddress.getLocalHost().getHostAddress().split("[.]");
+            InetAddress broadcastAddress = InetAddress.getByName(ip[0]+"."+ip[1]+"."+ip[2]+"."+"255");
             byte[] buffer = UserProfileManager.getCurrentUserProfile().getJson().getBytes();
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("192.168.1.255"), 53719); //TODO: Not hardcode 192.168.1, get host's network
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadcastAddress.getHostAddress()), 53719);
             socket.send(packet);
         }
         catch (IOException e)

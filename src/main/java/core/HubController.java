@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import network.NetworkManager;
 import user.StatusCondition;
 import user.UserProfile;
 import user.UserProfileManager;
@@ -149,6 +150,7 @@ public class HubController
                                       }
                                   }
                 );
+                NetworkManager.sendProfile();
             }
         }, 0, 1000*3); //TODO: Optimise
 
