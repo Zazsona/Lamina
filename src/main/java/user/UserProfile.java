@@ -1,7 +1,11 @@
 package user;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import javafx.scene.image.Image;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -59,6 +63,17 @@ public class UserProfile
         this.statusConditions = new StatusCondition[9];
         Arrays.fill(this.statusConditions, StatusCondition.NONE);
     }
+
+    /**
+     * Constructor
+     * @param json the json to create from
+     * @throws IllegalArgumentException invalid JSON
+     */
+    public UserProfile(String json) throws IllegalArgumentException
+    {
+        applyJson(json);
+    }
+
     /**
      * Gets name
      * @return name
@@ -193,6 +208,10 @@ public class UserProfile
         Arrays.fill(this.statusConditions, statusConditions.length, this.statusConditions.length, StatusCondition.NONE);
     }
 
+    /**
+     * Adds the specified status condition to the profile, if there is space.
+     * @param condition The condition to add
+     */
     public void addStatusCondition(StatusCondition condition)
     {
         for (int i = 0; i<statusConditions.length; i++)
@@ -204,6 +223,10 @@ public class UserProfile
         }
     }
 
+    /**
+     * Removes the specified status condition, if it exists.
+     * @param condition the condition to remove
+     */
     public void removeStatusCondition(StatusCondition condition)
     {
         for (int i = 0; i<statusConditions.length; i++)
@@ -222,5 +245,40 @@ public class UserProfile
                 break;
             }
         }
+    }
+
+    /**
+     * Returns this object as JSON
+     * @return
+     */
+    public String getJson()
+    {
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        return json;
+    }
+
+    /**
+     * Applies the state defined by the Json.
+     * @param json the json to apply
+     */
+    protected void applyJson(String json)
+    {
+        try
+        {
+            Gson gson = new Gson();
+            UserProfile profileFromJson = gson.fromJson(json, getClass());
+            setName(profileFromJson.getName());
+            setImage(profileFromJson.getImagePath());
+            setHitPoints(profileFromJson.getHitPoints());
+            setStamina(profileFromJson.getStamina());
+            setStatusConditions(profileFromJson.getStatusConditions());
+        }
+        catch (JsonSyntaxException | JsonIOException e)
+        {
+            System.err.println("Malformed JSON for profile.");
+            throw new IllegalArgumentException();
+        }
+
     }
 }

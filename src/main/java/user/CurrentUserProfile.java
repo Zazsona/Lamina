@@ -46,15 +46,9 @@ public class CurrentUserProfile extends UserProfile
     {
         try
         {
-            Gson gson = new Gson();
-            CurrentUserProfile profileFromFile = gson.fromJson(new String(Files.readAllBytes(getFile().toPath())), getClass());
-            setName(profileFromFile.getName());
-            setImage(profileFromFile.getImagePath());
-            setHitPoints(profileFromFile.getHitPoints());
-            setStamina(profileFromFile.getStamina());
-            setStatusConditions(profileFromFile.getStatusConditions());
+            applyJson(new String(Files.readAllBytes(getFile().toPath())));
         }
-        catch (IOException | NullPointerException e)
+        catch (IOException | NullPointerException | IllegalArgumentException e) //IAE is thrown is the JSON is invalid (File corrupted/modified)
         {
             System.err.println("Could not restore user profile.");
             throw new IOException();
@@ -69,8 +63,7 @@ public class CurrentUserProfile extends UserProfile
     {
         try
         {
-            Gson gson = new Gson();
-            String json = gson.toJson(this);
+            String json = getJson();
             PrintWriter printWriter = new PrintWriter(new FileOutputStream(getFile(), false));
             printWriter.print(json);
             printWriter.close();
