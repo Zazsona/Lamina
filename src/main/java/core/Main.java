@@ -5,12 +5,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import network.NetworkManager;
 import user.UserProfileManager;
 
 public class Main extends Application
 {
     public static void main(String[] args)
     {
+        Thread networkThread = new Thread(() -> NetworkManager.initialize());
+        networkThread.setName("Network Thread");
+        networkThread.setDaemon(true);
+        networkThread.start();
+
         launch(args);
     }
 

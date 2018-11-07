@@ -90,6 +90,7 @@ public class UserProfileManager //TODO: Replace usage of names with UUID.
         if (userProfiles.containsKey(userProfile.getName()))
         {
             userProfiles.replace(userProfile.getName(), userProfile);
+            userProfileTime.replace(userProfile.getName(), Instant.now().toEpochMilli());
         }
         else
         {

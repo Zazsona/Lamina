@@ -93,7 +93,7 @@ public class HubController
      */
     public void initialize()
     {
-        userText.setText(UserProfileManager.getCurrentUserProfile().getName());
+        userText.setText(UserProfileManager.getCurrentUserProfile().getName()); //TODO: Name sets, the others do not
         userImage.setImage(UserProfileManager.getCurrentUserProfile().getImage());
         userHPSlider.setValue(UserProfileManager.getCurrentUserProfile().getHitPoints());
         userStaminaSlider.setValue(UserProfileManager.getCurrentUserProfile().getStamina());
@@ -150,7 +150,7 @@ public class HubController
                                   }
                 );
             }
-        }, 0, 1000*5);
+        }, 0, 1000*3); //TODO: Optimise
 
     }
 
@@ -186,11 +186,11 @@ public class HubController
         statsHpBar.setStyle("-fx-accent: #16b120; -fx-control-inner-background: #121413; -fx-background: #242424;");
         statsHpBar.setMinHeight(20);
         statsHpBar.setMinWidth(400);
-        statsHpBar.setProgress(profile.getHitPoints());
+        statsHpBar.setProgress(profile.getHitPoints()/100);
         ProgressBar statsStaminaBar = new ProgressBar();
         statsStaminaBar.setStyle("-fx-accent: #333CF3; -fx-control-inner-background: #121413; -fx-background: #242424;");
         statsStaminaBar.setMinWidth(statsHpBar.getMinWidth()*0.33);
-        statsStaminaBar.setProgress(profile.getStamina());
+        statsStaminaBar.setProgress(profile.getStamina()/100);
         Pane statsDividerPane = new Pane();
         statsDividerPane.setMaxHeight(5);
         statsDividerPane.setMinHeight(5);
