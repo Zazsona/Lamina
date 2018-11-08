@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
@@ -13,9 +14,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -79,6 +82,11 @@ public class HubController
      */
     @FXML
     private Text userImageInstructions;
+    /**
+     * The grid that stores the status buttons
+     */
+    @FXML
+    private GridPane statusGrid;
 
     /**
      * Enum to represent the various input types that can be requested.
@@ -94,7 +102,7 @@ public class HubController
      */
     public void initialize()
     {
-        userText.setText(UserProfileManager.getCurrentUserProfile().getName()); //TODO: Name sets, the others do not
+        userText.setText(UserProfileManager.getCurrentUserProfile().getName());
         userImage.setImage(UserProfileManager.getCurrentUserProfile().getImage());
         userHPSlider.setValue(UserProfileManager.getCurrentUserProfile().getHitPoints());
         userStaminaSlider.setValue(UserProfileManager.getCurrentUserProfile().getStamina());
@@ -121,13 +129,30 @@ public class HubController
         userStaminaSlider.setOnScroll((value) -> userStaminaSlider.adjustValue(userStaminaSlider.getValue()+(value.getDeltaY()/4)));
 
         userText.setOnMouseClicked((value) -> getInput(InputRequest.USERNAME));
+        userText.setOnMouseEntered((value) ->
+                                   {
+                                       userText.setScaleX(1.05);
+                                       userText.setScaleY(1.05);
+                                   });
+        userText.setOnMouseExited((value) ->
+                                  {
+                                      userText.setScaleY(1);
+                                      userText.setScaleX(1);
+                                  });
         userImage.setOnMouseClicked((value) -> getInput(InputRequest.USERIMAGE));
         userImage.setOnMouseEntered((value) ->
                                     {
+                                        userImage.setScaleX(1.05);
+                                        userImage.setScaleY(1.05);
                                         userImageHover.setVisible(true);
                                         userImageInstructions.setVisible(false);
                                     });
-        userImage.setOnMouseExited((value) -> userImageHover.setVisible(false));
+        userImage.setOnMouseExited((value) ->
+                                   {
+                                       userImage.setScaleY(1);
+                                       userImage.setScaleX(1);
+                                       userImageHover.setVisible(false);
+                                   });
 
         Circle clip = new Circle(userImage.getFitWidth()/2, userImage.getFitHeight()/2, (userImage.getFitWidth()-20)/2); //Subtracting 1/10th here to ensure there is space for the dropshadow
         clip.setEffect(new DropShadow());
@@ -139,21 +164,92 @@ public class HubController
             @Override
             public void run()
             {
-                Platform.runLater(() ->
-                                  {
-                                      profileCollectionBox.getChildren().removeAll(profileCollectionBox.getChildren());
-                                      Iterator profileListIterator = UserProfileManager.getUserProfiles().entrySet().iterator();
-                                      while (profileListIterator.hasNext())
+                if (UserProfileManager.hasChangeOccurred()) //Avoids the expensive task of reconstructing the profile list arbitrarily.
+                {
+                    Platform.runLater(() ->
                                       {
-                                          HashMap.Entry<String, UserProfile> entry = (HashMap.Entry<String, UserProfile>) profileListIterator.next();
-                                          addProfile(entry.getValue());
+                                          profileCollectionBox.getChildren().removeAll(profileCollectionBox.getChildren());
+                                          Iterator profileListIterator = UserProfileManager.getUserProfiles().entrySet().iterator();
+                                          while (profileListIterator.hasNext())
+                                          {
+                                              HashMap.Entry<String, UserProfile> entry = (HashMap.Entry<String, UserProfile>) profileListIterator.next();
+                                              addProfile(entry.getValue());
+                                          }
                                       }
-                                  }
-                );
+                    );
+                }
                 NetworkManager.sendProfile();
             }
-        }, 0, 1000*3); //TODO: Optimise
+        }, 0, 1000*3);
 
+        DropShadow statusDropShadow = new DropShadow();
+        statusDropShadow.setColor(Color.WHITE);
+        for (Node node : statusGrid.getChildren())
+        {
+            StatusCondition statusCondition;
+            switch (node.getId().replace("StatusView", "")) //TODO: Surely there's a better way than a switch?
+            {
+                case "gaming":
+                    statusCondition = StatusCondition.GAMING;
+                    break;
+                case "watching":
+                    statusCondition = StatusCondition.WATCHING;
+                    break;
+                case "eating":
+                    statusCondition = StatusCondition.EATING;
+                    break;
+                case "hobbywork":
+                    statusCondition = StatusCondition.HOBBYWORK;
+                    break;
+                case "sleeping":
+                    statusCondition = StatusCondition.SLEEPING;
+                    break;
+                case "drinking":
+                    statusCondition = StatusCondition.DRINKING;
+                    break;
+                case "venturing":
+                    statusCondition = StatusCondition.VENTURING;
+                    break;
+                case "shopping":
+                    statusCondition = StatusCondition.SHOPPING;
+                    break;
+                case "working":
+                    statusCondition = StatusCondition.WORKING;
+                    break;
+                    default:
+                        statusCondition = StatusCondition.NONE;
+                        break;
+
+            }
+            if (UserProfileManager.getCurrentUserProfile().hasStatusCondition(statusCondition))
+            {
+                node.setEffect(statusDropShadow);
+            }
+            node.setOnMouseClicked((value) ->
+                                   {
+                                       if (node.getEffect() == null)
+                                       {
+                                           node.setEffect(statusDropShadow);
+                                           UserProfileManager.getCurrentUserProfile().addStatusCondition(statusCondition);
+                                       }
+                                       else
+                                       {
+                                           node.setEffect(null);
+                                           UserProfileManager.getCurrentUserProfile().removeStatusCondition(statusCondition);
+                                       }
+
+                                   });
+            node.setOnMouseEntered((value) ->
+                                   {
+                                       node.setScaleX(1.05);
+                                       node.setScaleY(1.05);
+                                   });
+            node.setOnMouseExited((value) ->
+                                  {
+                                      node.setScaleX(1);
+                                      node.setScaleY(1);
+                                  });
+        }
     }
 
     /**
@@ -203,30 +299,7 @@ public class HubController
             Circle statsConditionImage = new Circle();
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
-            switch (profile.getStatusConditions()[i])
-            {
-                case NONE:
-                    statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/none.png"))));
-                    break;
-                case GAMING:
-                    break;
-                case WATCHING:
-                    break;
-                case VENTURING:
-                    break;
-                case WORKING:
-                    break;
-                case SLEEPING:
-                    break;
-                case EATING:
-                    break;
-                case SHOPPING:
-                    break;
-                case DRINKING:
-                    break;
-                case HOBBYWORK:
-                    break;
-            }
+            statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/"+profile.getStatusConditions()[i].name()+".png"))));
         }
         statsBox.getChildren().add(statsName);
         statsBox.getChildren().add(statsHpBar);

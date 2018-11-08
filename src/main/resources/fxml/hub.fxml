@@ -120,7 +120,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Text>
-            <GridPane hgap="5.0" prefHeight="330.0" prefWidth="330.0" vgap="5.0">
+            <GridPane fx:id="statusGrid" hgap="5.0" prefHeight="330.0" prefWidth="330.0" vgap="5.0">
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -132,19 +132,49 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                  <ImageView fx:id="eatingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                      <image>
-                        <Image url="@../hubGraphics/status/none.png" />
+                        <Image url="@../hubGraphics/status/eating.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="gamingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../hubGraphics/status/gaming.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                  <ImageView fx:id="watchingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                      <image>
                         <Image url="@../hubGraphics/status/watching.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="hobbyworkStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@../hubGraphics/status/hobbywork.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="sleepingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@../hubGraphics/status/sleeping.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="drinkingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <image>
+                        <Image url="@../hubGraphics/status/drinking.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="venturingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@../hubGraphics/status/venturing.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="shoppingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@../hubGraphics/status/shopping.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="workingStatusView" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <image>
+                        <Image url="@../hubGraphics/status/working.png" />
                      </image>
                   </ImageView>
                </children>

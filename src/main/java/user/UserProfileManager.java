@@ -10,6 +10,7 @@ public class UserProfileManager //TODO: Replace usage of names with UUID.
     private static HashMap<String, UserProfile> userProfiles = new HashMap<>();
     private static HashMap<String, Long> userProfileTime = new HashMap<>();
     private static Timer profileCleanerTimer;
+    private static boolean changeOccurred = false;
 
     /**
      * Gets the profile for this user
@@ -83,17 +84,22 @@ public class UserProfileManager //TODO: Replace usage of names with UUID.
                         removeUserProfile(profile);
                     }
                 }
-            }, 1000*32, 1000*32);
+            }, 1000*16, 1000*16);
         }
 
 
         if (userProfiles.containsKey(userProfile.getName()))
         {
-            userProfiles.replace(userProfile.getName(), userProfile);
-            userProfileTime.replace(userProfile.getName(), Instant.now().toEpochMilli());
+            if (!userProfiles.get(userProfile.getName()).equals(userProfile))
+            {
+                userProfiles.replace(userProfile.getName(), userProfile);
+                changeOccurred = true;
+            }
+            userProfileTime.replace(userProfile.getName(), Instant.now().toEpochMilli()); //Keep this, as even though it's identical, it means the user is still around
         }
         else
         {
+            changeOccurred = true;
             userProfiles.put(userProfile.getName(), userProfile);
             userProfileTime.put(userProfile.getName(), Instant.now().toEpochMilli());
         }
@@ -105,11 +111,23 @@ public class UserProfileManager //TODO: Replace usage of names with UUID.
      */
     public static void removeUserProfile(UserProfile profile)
     {
-        userProfiles.remove(profile.getName());
+        changeOccurred = userProfiles.remove(profile.getName(), profile);
         userProfileTime.remove(profile.getName());
         if (userProfiles.size() == 0)
         {
             profileCleanerTimer.cancel();
         }
+    }
+
+    /**
+     * Returns if a change has occurred since the last call of this method.<br>
+     *     A change constitutes as any modification to the profiles, be it an addition, removal, or modification.
+     * @return whether a change has occurred since last call
+     */
+    public static boolean hasChangeOccurred()
+    {
+        boolean toReturn = changeOccurred; //We need to reset changeOccurred to false, as the value has been observed.
+        changeOccurred = false;
+        return toReturn;
     }
 }

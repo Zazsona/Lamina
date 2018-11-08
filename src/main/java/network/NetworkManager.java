@@ -39,11 +39,14 @@ public class NetworkManager
         {
             try
             {
-                byte[] buffer = new byte[UserProfileManager.getCurrentUserProfile().getJson().length()*2];
+                byte[] buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
-                UserProfile profile = new UserProfile(new String(packet.getData()).trim());
-                UserProfileManager.addUserProfile(profile);
+                if (!packet.getAddress().equals(InetAddress.getLocalHost())) //Ignore the current user's profile.
+                {
+                    UserProfile profile = new UserProfile(new String(packet.getData()).trim());
+                    UserProfileManager.addUserProfile(profile);
+                }
             }
             catch (IllegalArgumentException e)
             {

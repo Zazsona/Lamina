@@ -219,6 +219,7 @@ public class UserProfile
             if (statusConditions[i].equals(StatusCondition.NONE))
             {
                 statusConditions[i] = condition;
+                return;
             }
         }
     }
@@ -245,6 +246,23 @@ public class UserProfile
                 break;
             }
         }
+    }
+
+    /**
+     * Checks if the user has the specified status condition
+     * @param condition the condition to check
+     * @return whether the user has the condition or not
+     */
+    public boolean hasStatusCondition(StatusCondition condition)
+    {
+        for (int i = 0; i<statusConditions.length; i++)
+        {
+            if (statusConditions[i].equals(condition))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -280,5 +298,18 @@ public class UserProfile
             throw new IllegalArgumentException();
         }
 
+    }
+
+    @Override
+    public boolean equals(Object userProfile)
+    {
+        if (userProfile instanceof UserProfile)
+        {
+            if (getJson().equals(((UserProfile) userProfile).getJson()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
