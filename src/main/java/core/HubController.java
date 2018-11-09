@@ -2,6 +2,7 @@ package core;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -10,10 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -87,6 +90,11 @@ public class HubController
      */
     @FXML
     private GridPane statusGrid;
+    /**
+     * The scroll pane for profiles
+     */
+    @FXML
+    private ScrollPane profileScrollPane;
 
     /**
      * Enum to represent the various input types that can be requested.
@@ -250,6 +258,16 @@ public class HubController
                                       node.setScaleY(1);
                                   });
         }
+        profileCollectionBox.setOnScroll(event -> //Set scrolling to be "set" - That is, no matter how many elements are in the list, the moved pixels is the same.
+                                         {
+                                             double scrollAmount = (event.getDeltaY()/profileScrollPane.getContent().getBoundsInLocal().getHeight()/2);
+                                             profileScrollPane.setVvalue(profileScrollPane.getVvalue() + -scrollAmount);
+                                         });
+        for (int i = 0; i<20; i++)
+        {
+            addProfile(UserProfileManager.getCurrentUserProfile());
+        } //TODO: Remove
+
     }
 
     /**
@@ -297,6 +315,7 @@ public class HubController
         for (int i = 0; i<profile.getStatusConditions().length; i++)
         {
             Circle statsConditionImage = new Circle();
+            statsConditionImage.setSmooth(true);
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
             statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/"+profile.getStatusConditions()[i].name()+".png"))));
