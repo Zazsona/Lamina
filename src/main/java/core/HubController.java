@@ -263,10 +263,6 @@ public class HubController
                                              double scrollAmount = (event.getDeltaY()/profileScrollPane.getContent().getBoundsInLocal().getHeight()/2);
                                              profileScrollPane.setVvalue(profileScrollPane.getVvalue() + -scrollAmount);
                                          });
-        for (int i = 0; i<20; i++)
-        {
-            addProfile(UserProfileManager.getCurrentUserProfile());
-        } //TODO: Remove
 
     }
 
@@ -318,7 +314,7 @@ public class HubController
             statsConditionImage.setSmooth(true);
             statsConditionImage.setRadius(20);
             statsConditionBox.getChildren().add(statsConditionImage);
-            statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/"+profile.getStatusConditions()[i].name()+".png"))));
+            statsConditionImage.setFill(new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("hubGraphics/status/"+profile.getStatusConditions()[i].name().toLowerCase()+".png"))));
         }
         statsBox.getChildren().add(statsName);
         statsBox.getChildren().add(statsHpBar);

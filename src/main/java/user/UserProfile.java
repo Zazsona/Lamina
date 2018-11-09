@@ -235,19 +235,12 @@ public class UserProfile
             if (statusConditions[i].equals(condition))
             {
                 statusConditions[i] = StatusCondition.NONE;
-                if (i == statusConditions.length-1)
-                {
-                    statusConditions[i] = StatusCondition.NONE;
-                }
-                else if (!statusConditions[i+1].equals(StatusCondition.NONE))
-                {
-                    for (int j = i; j<statusConditions.length-1; j++)
-                    {
-                        statusConditions[j] = statusConditions[j+1];
 
-                    }
+                for (int j = i; j<statusConditions.length-1; j++)
+                {
+                    statusConditions[j] = statusConditions[j+1];
+                    statusConditions[j+1] = StatusCondition.NONE;
                 }
-
                 break;
             }
         }
