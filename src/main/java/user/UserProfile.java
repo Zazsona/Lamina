@@ -235,7 +235,11 @@ public class UserProfile
             if (statusConditions[i].equals(condition))
             {
                 statusConditions[i] = StatusCondition.NONE;
-                if (!statusConditions[i+1].equals(StatusCondition.NONE))
+                if (i == statusConditions.length-1)
+                {
+                    statusConditions[i] = StatusCondition.NONE;
+                }
+                else if (!statusConditions[i+1].equals(StatusCondition.NONE))
                 {
                     for (int j = i; j<statusConditions.length-1; j++)
                     {
@@ -243,6 +247,7 @@ public class UserProfile
 
                     }
                 }
+
                 break;
             }
         }
